@@ -9,15 +9,10 @@ module.exports = class Game
 
 
   create: ->
-    # @game.physics.gravity.y = 250
-    # @game.physics.setBoundsToWorld()
     @squares =  @game.add.group()
-    @squares.createMultiple(64, 'sq')
+    @squares.createMultiple(94, 'sq')
     @squares.setAll('outOfBoundsKill', true)
     @squares.forEach(@addSquare, this, false)
-    # @squares.setAll('body.bounce.x', 0)
-    # @squares.setAll('body.bounce.y', 0)
-    # @squares.setAll('body.minBounceVelocity', 0)
 
   update: ->
     # @game.physics.collide(@squares)
@@ -30,14 +25,12 @@ module.exports = class Game
     x = (idx % 8) * 75
     y = (Math.floor(idx / 8)) * 75
     sq.reset(x,y)
-    # sq.body.collideWorldBounds=true
-    # sq.body.gravity.y = 50
-    # sq.body.setRectangle(75, 75, 0, 0)
     sq.inputEnabled = true
     sq.input.pixelPerfect = true
     sq.events.onInputUp.add(@squareTouched, this)
 
   squareTouched: (sq) ->
+    sq.inputEnabled = false
     gridCoord = @getGridCoord(sq)
     effectedSqs = @getSquaresAbove(sq, gridCoord)
     killSqTween = @game.add.tween(sq)
@@ -46,12 +39,14 @@ module.exports = class Game
       .onComplete.add(->
         sq.kill()
       , this)
+
     effectedSqs.forEach( (sq) =>
       tween = @game.add.tween(sq)
       tween
         .to({y: sq.y + 75}, 200, Phaser.Easing.Bounce.None)
         .start()
     )
+    @addNewSquare(gridCoord.x)
 
   getGridCoord: (sq) ->
     x = sq.x
@@ -78,3 +73,15 @@ module.exports = class Game
         foundSq = sq
     , this)
     return foundSq
+
+  addNewSquare: (x) ->
+    xPos = (x - 1) * 75
+    sq = @squares.getFirstDead()
+    sq.alpha = 0
+    sq.reset(xPos, 0)
+    sq.inputEnabled = true
+    sq.input.pixelPerfect = true
+    sq.events.onInputUp.add(@squareTouched, this)
+    addSquareTween = @game.add.tween(sq)
+      .to({alpha: 1}, 300, Phaser.Easing.Bounce.None)
+      .start()
