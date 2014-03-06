@@ -40,8 +40,13 @@ module.exports = class Game
   squareTouched: (sq) ->
     gridCoord = @getGridCoord(sq)
     effectedSqs = @getSquaresAbove(sq, gridCoord)
-    #debugger
     sq.kill()
+    effectedSqs.forEach( (sq) =>
+      tween = @game.add.tween(sq)
+      tween
+        .to({y: sq.y + 75}, 300, Phaser.Easing.Bounce.None)
+        .start()
+    )
 
   getGridCoord: (sq) ->
     x = sq.x
@@ -57,8 +62,7 @@ module.exports = class Game
     for num in [gridCoord.y - 1...0]
       yPos = sq.y - (num * 75)
       squaresAbove.push(@getSquareAt({x:xPos, y:yPos}))
-    console.log(squaresAbove)
-
+    return squaresAbove
 
   getSquareAt: (coord) ->
     foundSq = null
