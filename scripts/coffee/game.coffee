@@ -53,8 +53,17 @@ module.exports = class Game
 
   getSquaresAbove: (sq, gridCoord) ->
     xPos = sq.x
+    squaresAbove = []
     for num in [gridCoord.y - 1...0]
       yPos = sq.y - (num * 75)
-      console.log yPos
-      # yPos = sq.y - (75*num)
-      # console.log(yPos)
+      squaresAbove.push(@getSquareAt({x:xPos, y:yPos}))
+    console.log(squaresAbove)
+
+
+  getSquareAt: (coord) ->
+    foundSq = null
+    @squares.forEachAlive( (sq) =>
+      if sq.x == coord.x and sq.y == coord.y
+        foundSq = sq
+    , this)
+    return foundSq
