@@ -39,7 +39,8 @@ module.exports = class Game
 
   squareTouched: (sq) ->
     gridCoord = @getGridCoord(sq)
-    debugger
+    effectedSqs = @getSquaresAbove(sq, gridCoord)
+    #debugger
     sq.kill()
 
   getGridCoord: (sq) ->
@@ -49,3 +50,11 @@ module.exports = class Game
       x : sq.x / 75 + 1
       y : sq.y / 75 + 1
     }
+
+  getSquaresAbove: (sq, gridCoord) ->
+    xPos = sq.x
+    for num in [gridCoord.y - 1...0]
+      yPos = sq.y - (num * 75)
+      console.log yPos
+      # yPos = sq.y - (75*num)
+      # console.log(yPos)
