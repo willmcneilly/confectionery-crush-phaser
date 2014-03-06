@@ -40,11 +40,16 @@ module.exports = class Game
   squareTouched: (sq) ->
     gridCoord = @getGridCoord(sq)
     effectedSqs = @getSquaresAbove(sq, gridCoord)
-    sq.kill()
+    killSqTween = @game.add.tween(sq)
+      .to({alpha: 0}, 300, Phaser.Easing.Bounce.None)
+      .start()
+      .onComplete.add(->
+        sq.kill()
+      , this)
     effectedSqs.forEach( (sq) =>
       tween = @game.add.tween(sq)
       tween
-        .to({y: sq.y + 75}, 300, Phaser.Easing.Bounce.None)
+        .to({y: sq.y + 75}, 200, Phaser.Easing.Bounce.None)
         .start()
     )
 
