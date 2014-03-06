@@ -61,7 +61,9 @@ module.exports = class Game
     squaresAbove = []
     for num in [gridCoord.y - 1...0]
       yPos = sq.y - (num * 75)
-      squaresAbove.push(@getSquareAt({x:xPos, y:yPos}))
+      foundSq = @getSquareAt({x:xPos, y:yPos})
+      unless foundSq == null
+        squaresAbove.push(foundSq)
     return squaresAbove
 
   getSquareAt: (coord) ->
