@@ -85,3 +85,51 @@ module.exports = class Game
     addSquareTween = @game.add.tween(sq)
       .to({alpha: 1}, 300, Phaser.Easing.Bounce.None)
       .start()
+
+  findMatches: (grid) ->
+    gridSize = grid.length
+    matches = []
+    rowMatch = []
+    columnMatch = []
+    i = 0
+
+    while i < gridSize
+      oneBeforeRow = null
+      oneBeforeColumn = null
+      currentRow = null
+      currentColumn = null
+      t = 0
+
+      while t < gridSize
+        currentRow = grid[i][t]
+        currentColumn = grid[t][i]
+        if currentRow is oneBeforeRow
+          rowMatch.push
+            x: t
+            y: i
+
+        else
+          matches.push rowMatch  if rowMatch.length > 2
+          rowMatch = []
+          rowMatch.push
+            x: t
+            y: i
+
+        oneBeforeRow = currentRow
+        if currentColumn is oneBeforeColumn
+          columnMatch.push
+            x: i
+            y: t
+
+        else
+          matches.push columnMatch  if columnMatch.length > 2
+          columnMatch = []
+          columnMatch.push
+            x: i
+            y: t
+
+        oneBeforeColumn = currentColumn
+        t++
+      i++
+    console.log matches
+    matches
