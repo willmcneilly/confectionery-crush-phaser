@@ -1,5 +1,10 @@
 FPS = require './fps'
 
+# Generate grid associate sprite types with a letter
+# Loop through this array and layout associated sprites on canvas
+# Check for matches
+# detect match location and move sprites above, down
+
 module.exports = class Game
   constructor: (game) ->
     @game = game
